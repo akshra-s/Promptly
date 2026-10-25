@@ -2,7 +2,10 @@
 import express from "express";
 import "dotenv/config";
 import cors from "cors";
-import OpenAI from "openai";
+import mongoose from "mongoose";
+import dns from "node:dns";
+dns.setServers(["8.8.8.8"]);
+import chatRoutes from "./routes/chat.js";
 
 const app = express();
 const port = 8080;
@@ -10,37 +13,28 @@ const port = 8080;
 app.use(express.json());
 app.use(cors());
 
-const client = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY,
-  baseURL: "https://api.groq.com/openai/v1",
-});
+app.use("/api",chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Promptly backend is running!");
 });
 
-app.post("/api/chat", async (req, res) => {
+const connectDB = async () => {
   try {
-    const { message } = req.body;
-
-    if (!message || typeof message !== "string") {
-      return res.status(400).json({ error: "Message is required." });
-    }
-
-    const response = await client.chat.completions.create({
-      model: "openai/gpt-oss-20b",
-      messages: [{ role: "user", content: message }],
-    });
-
-    res.json({
-      reply: response.choices[0].message.content,
-    });
-  } catch (error) {
-    console.error("Groq API error:", error.message);
-    res.status(500).json({ error: "Failed to generate a response." });
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected with Database!");
+  } catch (err) {
+    console.error("Failed to connect with database:", err.message);
+    process.exit(1);
   }
-});
+};
 
-app.listen(port, () => {
-  console.log(`Server is listening to port-${port}`);
-});
+const startServer = async () => {
+  await connectDB();
+
+  app.listen(port, () => {
+    console.log(`Server is listening to port-${port}`);
+  });
+};
+
+startServer();
