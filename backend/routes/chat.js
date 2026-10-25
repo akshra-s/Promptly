@@ -27,7 +27,7 @@ router.post("/chat", async (req, res) => {
   try {
     const { threadId, message } = req.body;
 
-    if (!message || !message.trim()) {
+    if (typeof message !== "string" || !message.trim()) {
       return res.status(400).json({ error: "Message is required" });
     }
 
@@ -68,6 +68,55 @@ router.post("/chat", async (req, res) => {
   } catch (err) {
     console.error("Chat route error:", err);
     res.status(500).json({ error: "Failed to process chat message" });
+  }
+});
+
+// Get all threads
+router.get("/thread", async (req, res) => {
+  try {
+    const threads = await Thread.find({}).sort({ updatedAt: -1 });
+    res.json(threads);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch threads" });
+  }
+});
+
+// Get messages of a specific thread
+router.get("/thread/:threadId", async (req, res) => {
+  try {
+    const thread = await Thread.findOne({
+      threadId: req.params.threadId,
+    });
+
+    if (!thread) {
+      return res.status(404).json({ error: "Thread not found" });
+    }
+
+    res.json(thread.messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch chat" });
+  }
+});
+
+// Delete a thread
+router.delete("/thread/:threadId", async (req, res) => {
+  try {
+    const deletedThread = await Thread.findOneAndDelete({
+      threadId: req.params.threadId,
+    });
+
+    if (!deletedThread) {
+      return res.status(404).json({ error: "Thread not found" });
+    }
+
+    res.status(200).json({
+      success: "Thread deleted successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to delete thread" });
   }
 });
 
