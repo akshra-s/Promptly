@@ -1,24 +1,36 @@
 :root {
-  --accent: #36D7B7;
-  --accent-subtle: #36D7B70F;
-  --bg-main: #212121;
+  --accent: #36d7b7;
+  --accent-subtle: #36d7b70f;
+
+  --bg-main: #202020;
   --bg-sidebar: #171717;
-  --bg-surface: #2B2B2B;
-  --text-primary: #D0D0D0;
+  --bg-surface: #292929;
+  --bg-hover: #303030;
+
+  --text-primary: #d0d0d0;
   --text-secondary: #858585;
   --border: #383838;
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  height: 100%;
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   background: var(--bg-main);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
@@ -26,45 +38,51 @@ input {
   font: inherit;
 }
 
+button {
+  color: inherit;
+}
+
 .main {
   display: flex;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
+  background: var(--bg-main);
 }
 
 .sidebar {
-  background: var(--bg-sidebar);
-  color: var(--text-secondary);
-  height: 100vh;
+  position: relative;
+  z-index: 2;
+  flex: 0 0 260px;
   width: 260px;
-  min-width: 260px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px 12px;
+  min-width: 0;
+  height: 100%;
+  background: var(--bg-sidebar);
 }
 
 .navbar {
   position: fixed;
   top: 0;
-  left: 260px;
   right: 0;
-  height: 60px;
+  left: 260px;
+  z-index: 1;
+
   display: flex;
   align-items: center;
+  height: 60px;
   padding: 0 24px;
+
   background: var(--bg-main);
+  color: var(--text-primary);
   font-size: 18px;
   font-weight: 600;
-  z-index: 1;
 }
 
 @media (max-width: 700px) {
   .sidebar {
+    flex-basis: 70px;
     width: 70px;
-    min-width: 70px;
-    padding: 12px 8px;
   }
 
   .navbar {

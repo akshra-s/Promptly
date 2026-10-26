@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import "./InputBox.css";
 import { MyContext } from "./MyContext.jsx";
 
@@ -9,19 +10,19 @@ export default function Inputbox() {
   return (
     <form
       className="inputbox"
-      onSubmit={(e) => {
-        e.preventDefault();
+      onSubmit={(event) => {
+        event.preventDefault();
         getReply();
       }}
     >
       <button
         type="button"
-        className="input-btn"
+        className="input-btn attachment-btn"
         aria-label="Add attachment"
         disabled
         title="Attachments are not available yet"
       >
-        <i className="fa-solid fa-square-plus"></i>
+        <i className="fa-solid fa-plus" aria-hidden="true" />
       </button>
 
       <input
@@ -29,7 +30,7 @@ export default function Inputbox() {
         value={prompt}
         placeholder="Ask Promptly anything..."
         aria-label="Message"
-        onChange={(e) => setPrompt(e.target.value)}
+        onChange={(event) => setPrompt(event.target.value)}
         disabled={isLoading}
       />
 
@@ -39,7 +40,7 @@ export default function Inputbox() {
         aria-label="Send message"
         disabled={isLoading || !prompt.trim()}
       >
-        <i className="fa-solid fa-paper-plane"></i>
+        <i className="fa-solid fa-arrow-up" aria-hidden="true" />
       </button>
     </form>
   );

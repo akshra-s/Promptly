@@ -1,17 +1,18 @@
+import { useState } from "react";
+import { v4 as uuid } from "uuid";
+
 import "./App.css";
 import Sidebar from "./Sidebar.jsx";
 import Navbar from "./Navbar.jsx";
 import Chats from "./Chats.jsx";
-import Inputbox from "./Inputbox.jsx";
+import Inputbox from "./InputBox.jsx";
 import ChatWindow from "./ChatWindow.jsx";
 import { MyContext } from "./MyContext.jsx";
-import { useState } from "react";
-import { v4 as uuid } from "uuid";
 
 function App() {
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([]);
-  const [currThreadId, setCurrThreadId] = useState(uuid());
+  const [currThreadId, setCurrThreadId] = useState(() => uuid());
   const [isLoading, setIsLoading] = useState(false);
 
   const getReply = async () => {
@@ -19,7 +20,10 @@ function App() {
 
     if (!message || isLoading) return;
 
-    setMessages((prev) => [...prev, { role: "user", content: message }]);
+    setMessages((previous) => [
+      ...previous,
+      { role: "user", content: message },
+    ]);
     setPrompt("");
     setIsLoading(true);
 
@@ -38,28 +42,41 @@ function App() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to get a reply");
+        throw new Error(data.error || "The request failed.");
+      }
+
+      if (typeof data.reply !== "string" || !data.reply.trim()) {
+        throw new Error("The server returned an empty reply.");
       }
 
       setCurrThreadId(data.threadId);
 
-      setMessages((prev) => [
-        ...prev,
+      setMessages((previous) => [
+        ...previous,
         { role: "assistant", content: data.reply },
       ]);
     } catch (error) {
-      console.error("Chat error:", error);
+      console.error("Promptly chat error:", error);
 
-      setMessages((prev) => [
-        ...prev,
+      setMessages((previous) => [
+        ...previous,
         {
           role: "assistant",
-          content: "Sorry, something went wrong. Please try again.",
+          content:
+            "I couldn't get a reply. Please check that the backend and AI service are running, then try again.",
         },
       ]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const startNewChat = () => {
+    if (isLoading) return;
+
+    setPrompt("");
+    setMessages([]);
+    setCurrThreadId(uuid());
   };
 
   const providerValues = {
@@ -71,6 +88,7 @@ function App() {
     currThreadId,
     setCurrThreadId,
     setMessages,
+    startNewChat,
   };
 
   return (
