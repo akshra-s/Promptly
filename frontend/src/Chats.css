@@ -1,3 +1,4 @@
+
 .chats {
   width: 100%;
   max-width: 760px;
@@ -46,46 +47,16 @@
   padding-left: 4px;
 }
 
-.thinking {
+.loader {
   display: flex;
-  align-items: center;
-  gap: 5px;
   align-self: flex-start;
-  padding: 12px 4px;
-}
-
-.thinking span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0.4;
-  animation: thinking 1s infinite ease-in-out;
-}
-
-.thinking span:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.thinking span:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-@keyframes thinking {
-  0%, 60%, 100% {
-    opacity: 0.35;
-    transform: translateY(0);
-  }
-
-  30% {
-    opacity: 1;
-    transform: translateY(-4px);
-  }
+  justify-content: flex-start;
+  padding: 10px 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .thinking span {
-    animation: none;
-    opacity: 0.8;
+  .loader * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
