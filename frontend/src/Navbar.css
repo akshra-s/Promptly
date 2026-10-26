@@ -1,15 +1,37 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 260px;
+  right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  background-color: var(--bg-main);
+  font-size: 20px;
+  font-weight: 600;
+  z-index: 1;
+}
+
 .profile-btn {
   margin-left: auto;
   width: 36px;
   height: 36px;
-  border: none;
+  border: 1px solid #383838;
   border-radius: 50%;
-  background: #303030;
-  color: #ececec;
+  background: var(--bg-surface);
+  color: var(--accent);
   font-size: 16px;
   cursor: pointer;
 }
 
 .profile-btn:hover {
-  background: #454545;
+  background: var(--accent-subtle);
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    left: 70px;
+    padding: 0 16px;
+  }
 }

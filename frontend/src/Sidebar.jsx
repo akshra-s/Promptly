@@ -8,7 +8,6 @@ export default function Sidebar() {
       <div className="sidebar-top">
         <div className="sidebar-header">
           <img src={logo} alt="Promptly logo" className="logo" />
-          
           <div className="sidebar-icons">
             <i className="fa-solid fa-magnifying-glass"></i>
             <i className="fa-solid fa-right-to-bracket"></i>
