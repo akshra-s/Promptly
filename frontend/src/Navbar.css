@@ -1,0 +1,15 @@
+.profile-btn {
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #303030;
+  color: #ececec;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profile-btn:hover {
+  background: #454545;
+}

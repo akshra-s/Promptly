@@ -17,3 +17,9 @@
   overflow-y: auto;
   padding: 20px 0;
 }
+.disclaimer {
+  margin-top: 12px;
+  color: #888;
+  font-size: 12px;
+  text-align: center;
+}
