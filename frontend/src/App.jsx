@@ -11,8 +11,10 @@ import { MyContext } from "./MyContext.jsx";
 
 function App() {
   const [prompt, setPrompt] = useState("");
-  const [messages, setMessages] = useState([]);
+  const [reply, setReply] = useState(null);
   const [currThreadId, setCurrThreadId] = useState(() => uuid());
+  const [prevChats, setPrevChats] = useState([]);
+  const [newChat, setNewChat] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   const getReply = async () => {
@@ -20,12 +22,9 @@ function App() {
 
     if (!message || isLoading) return;
 
-    setMessages((previous) => [
-      ...previous,
-      { role: "user", content: message },
-    ]);
-    setPrompt("");
     setIsLoading(true);
+    setNewChat(false);
+    setReply(null);
 
     try {
       const response = await fetch("http://localhost:8080/api/chat", {
@@ -45,27 +44,11 @@ function App() {
         throw new Error(data.error || "The request failed.");
       }
 
-      if (typeof data.reply !== "string" || !data.reply.trim()) {
-        throw new Error("The server returned an empty reply.");
-      }
-
       setCurrThreadId(data.threadId);
-
-      setMessages((previous) => [
-        ...previous,
-        { role: "assistant", content: data.reply },
-      ]);
+      setReply(data.reply);
     } catch (error) {
       console.error("Promptly chat error:", error);
-
-      setMessages((previous) => [
-        ...previous,
-        {
-          role: "assistant",
-          content:
-            "I couldn't get a reply. Please check that the backend and AI service are running, then try again.",
-        },
-      ]);
+      setReply("Sorry, something went wrong. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -75,19 +58,25 @@ function App() {
     if (isLoading) return;
 
     setPrompt("");
-    setMessages([]);
+    setReply(null);
+    setPrevChats([]);
     setCurrThreadId(uuid());
+    setNewChat(true);
   };
 
   const providerValues = {
     prompt,
     setPrompt,
-    messages,
-    isLoading,
-    getReply,
+    reply,
+    setReply,
     currThreadId,
     setCurrThreadId,
-    setMessages,
+    newChat,
+    setNewChat,
+    prevChats,
+    setPrevChats,
+    isLoading,
+    getReply,
     startNewChat,
   };
 

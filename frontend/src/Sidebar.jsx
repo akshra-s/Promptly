@@ -1,8 +1,12 @@
 
+import { useContext } from "react";
 import "./Sidebar.css";
 import logo from "./assets/p_logo.png";
+import { MyContext } from "./MyContext.jsx";
 
 export default function Sidebar() {
+  const { startNewChat } = useContext(MyContext);
+
   return (
     <section className="sidebar">
       <div className="sidebar-top">
@@ -14,7 +18,10 @@ export default function Sidebar() {
           </div>
         </div>
 
-        <button className="new-chat">
+        <button
+          className="new-chat"
+          onClick={startNewChat}
+        >
           <i className="fa-solid fa-pen-to-square"></i>
           <span>New Chat</span>
         </button>
