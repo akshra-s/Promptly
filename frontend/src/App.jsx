@@ -16,6 +16,7 @@ function App() {
   const [prevChats, setPrevChats] = useState([]);
   const [newChat, setNewChat] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [allThreads, setAllThreads] = useState([]);
 
   const getReply = async () => {
     const message = prompt.trim();
@@ -78,6 +79,8 @@ function App() {
     isLoading,
     getReply,
     startNewChat,
+    allThreads,
+    setAllThreads,
   };
 
   return (

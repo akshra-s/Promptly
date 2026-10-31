@@ -121,3 +121,34 @@
     padding: 10px;
   }
 }
+.history li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.history li span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history li i {
+  opacity: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.history li:hover i {
+  opacity: 1;
+}
+
+.history li i:hover {
+  color: #ff6b6b;
+}
+
+.history li.highlighted {
+  background-color: var(--accent-subtle);
+  color: var(--text-primary);
+}
