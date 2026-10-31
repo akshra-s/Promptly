@@ -1,10 +1,10 @@
 
 import "./Sidebar.css";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import logo from "./assets/p_logo.png";
 import { MyContext } from "./MyContext.jsx";
 
-export default function Sidebar() {
+export default function Sidebar({ toggleSidebar }) {
   const {
     allThreads,
     setAllThreads,
@@ -16,6 +16,9 @@ export default function Sidebar() {
     setPrompt,
     startNewChat,
   } = useContext(MyContext);
+
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const getAllThreads = async () => {
     try {
@@ -88,6 +91,10 @@ export default function Sidebar() {
     }
   };
 
+  const filteredThreads = allThreads.filter((thread) =>
+    thread.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <section className="sidebar">
       <div className="sidebar-top">
@@ -95,36 +102,72 @@ export default function Sidebar() {
           <img src={logo} alt="Promptly logo" className="logo" />
 
           <div className="sidebar-icons">
-            <i className="fa-solid fa-magnifying-glass"></i>
-            <i className="fa-solid fa-right-to-bracket"></i>
+            <i
+              className="fa-solid fa-magnifying-glass"
+              title="Search chats"
+              onClick={() => {
+                setSearchOpen((prev) => !prev);
+                setSearchTerm("");
+              }}
+            ></i>
+
+            <i
+              className="fa-solid fa-right-to-bracket"
+              onClick={toggleSidebar}
+              title="Close sidebar"
+            ></i>
           </div>
         </div>
 
-        <button className="new-chat" onClick={startNewChat}>
+        {searchOpen && (
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search conversations..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            autoFocus
+          />
+        )}
+
+        <button
+          className="new-chat"
+          onClick={() => {
+            startNewChat();
+            setSearchTerm("");
+            setSearchOpen(false);
+          }}
+        >
           <i className="fa-solid fa-pen-to-square"></i>
           <span>New Chat</span>
         </button>
 
         <ul className="history">
-          {allThreads.map((thread) => (
-            <li
-              key={thread.threadId}
-              onClick={() => changeThread(thread.threadId)}
-              className={
-                thread.threadId === currThreadId ? "highlighted" : ""
-              }
-            >
-              <span>{thread.title}</span>
+          {filteredThreads.length > 0 ? (
+            filteredThreads.map((thread) => (
+              <li
+                key={thread.threadId}
+                onClick={() => changeThread(thread.threadId)}
+                className={
+                  thread.threadId === currThreadId ? "highlighted" : ""
+                }
+              >
+                <span>{thread.title}</span>
 
-              <i
-                className="fa-solid fa-trash"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteThread(thread.threadId);
-                }}
-              ></i>
-            </li>
-          ))}
+                <i
+                  className="fa-solid fa-trash"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteThread(thread.threadId);
+                  }}
+                ></i>
+              </li>
+            ))
+          ) : (
+            <p className="no-results">
+              {searchTerm ? "No conversations found." : "No conversations yet."}
+            </p>
+          )}
         </ul>
       </div>
 

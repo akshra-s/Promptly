@@ -71,3 +71,21 @@
     right: 16px;
   }
 }
+
+.sidebar-reopen {
+  width: 36px;
+  height: 36px;
+  margin-right: 16px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.sidebar-reopen:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+}
+

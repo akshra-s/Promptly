@@ -2,22 +2,29 @@
 import { useState } from "react";
 import "./Navbar.css";
 
-export default function Navbar() {
+export default function Navbar({ sidebarOpen, toggleSidebar }) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleProfileClick = () => {
-    setIsOpen(!isOpen);
-  };
 
   return (
     <header className="navbar">
+      {!sidebarOpen && (
+        <button
+          className="sidebar-reopen"
+          onClick={toggleSidebar}
+          aria-label="Open sidebar"
+          title="Open sidebar"
+        >
+          <i className="fa-solid fa-bars"></i>
+        </button>
+      )}
+
       <span>Promptly</span>
 
       <button
         className="profile-btn"
         aria-label="Profile"
         aria-expanded={isOpen}
-        onClick={handleProfileClick}
+        onClick={() => setIsOpen(!isOpen)}
       >
         <i className="fa-solid fa-user"></i>
       </button>

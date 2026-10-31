@@ -90,3 +90,20 @@ button {
     padding: 0 16px;
   }
 }
+.main .sidebar {
+  transition: width 0.25s ease, flex-basis 0.25s ease,
+    min-width 0.25s ease, padding 0.25s ease;
+}
+
+.main.sidebar-closed .sidebar {
+  flex-basis: 0;
+  width: 0;
+  min-width: 0;
+  padding-left: 0;
+  padding-right: 0;
+  overflow: hidden;
+}
+
+.main.sidebar-closed .navbar {
+  left: 0;
+}

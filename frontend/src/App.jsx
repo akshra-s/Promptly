@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 
@@ -17,6 +18,7 @@ function App() {
   const [newChat, setNewChat] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [allThreads, setAllThreads] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const getReply = async () => {
     const message = prompt.trim();
@@ -30,9 +32,7 @@ function App() {
     try {
       const response = await fetch("http://localhost:8080/api/chat", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message,
           threadId: currThreadId,
@@ -84,10 +84,16 @@ function App() {
   };
 
   return (
-    <div className="main">
+    <div className={`main ${sidebarOpen ? "" : "sidebar-closed"}`}>
       <MyContext.Provider value={providerValues}>
-        <Sidebar />
-        <Navbar />
+        <Sidebar
+          toggleSidebar={() => setSidebarOpen((prev) => !prev)}
+        />
+
+        <Navbar
+          sidebarOpen={sidebarOpen}
+          toggleSidebar={() => setSidebarOpen((prev) => !prev)}
+        />
 
         <ChatWindow>
           <Chats />
