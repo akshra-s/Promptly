@@ -4,16 +4,55 @@ import "dotenv/config";
 import cors from "cors";
 import mongoose from "mongoose";
 import dns from "node:dns";
-dns.setServers(["8.8.8.8"]);
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import authRoutes from "./routes/auth.js";
+
+import User from "./models/User.js";
 import chatRoutes from "./routes/chat.js";
+
+dns.setServers(["8.8.8.8"]);
 
 const app = express();
 const port = 8080;
 
 app.use(express.json());
-app.use(cors());
 
-app.use("/api",chatRoutes);
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      collectionName: "sessions",
+    }),
+    cookie: {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use("/api/auth", authRoutes);
+app.use("/api", chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Promptly backend is running!");

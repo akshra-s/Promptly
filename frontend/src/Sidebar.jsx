@@ -22,7 +22,9 @@ export default function Sidebar({ toggleSidebar }) {
 
   const getAllThreads = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/thread");
+      const response = await fetch("http://localhost:8080/api/thread", {
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch threads");
@@ -52,7 +54,10 @@ export default function Sidebar({ toggleSidebar }) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/thread/${newThreadId}`
+        `http://localhost:8080/api/thread/${newThreadId}`,
+        {
+          credentials: "include",
+        }
       );
 
       if (!response.ok) {
@@ -72,7 +77,10 @@ export default function Sidebar({ toggleSidebar }) {
     try {
       const response = await fetch(
         `http://localhost:8080/api/thread/${threadId}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
       );
 
       if (!response.ok) {
@@ -165,7 +173,9 @@ export default function Sidebar({ toggleSidebar }) {
             ))
           ) : (
             <p className="no-results">
-              {searchTerm ? "No conversations found." : "No conversations yet."}
+              {searchTerm
+                ? "No conversations found."
+                : "No conversations yet."}
             </p>
           )}
         </ul>

@@ -1,8 +1,9 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 
 import "./App.css";
+import Auth from "./Auth.jsx";
 import Sidebar from "./Sidebar.jsx";
 import Navbar from "./Navbar.jsx";
 import Chats from "./Chats.jsx";
@@ -11,6 +12,9 @@ import ChatWindow from "./ChatWindow.jsx";
 import { MyContext } from "./MyContext.jsx";
 
 function App() {
+  const [user, setUser] = useState(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
   const [prompt, setPrompt] = useState("");
   const [reply, setReply] = useState(null);
   const [currThreadId, setCurrThreadId] = useState(() => uuid());
@@ -19,6 +23,29 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [allThreads, setAllThreads] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  // Check existing login session
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/auth/user",
+          { credentials: "include" }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        }
+      } catch (error) {
+        console.error("Authentication check failed:", error);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+
+    checkUser();
+  }, []);
 
   const getReply = async () => {
     const message = prompt.trim();
@@ -33,6 +60,7 @@ function App() {
       const response = await fetch("http://localhost:8080/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           message,
           threadId: currThreadId,
@@ -83,6 +111,14 @@ function App() {
     setAllThreads,
   };
 
+  if (checkingAuth) {
+    return <div className="auth-loading">Loading Promptly...</div>;
+  }
+
+  if (!user) {
+    return <Auth onLogin={setUser} />;
+  }
+
   return (
     <div className={`main ${sidebarOpen ? "" : "sidebar-closed"}`}>
       <MyContext.Provider value={providerValues}>
@@ -93,6 +129,8 @@ function App() {
         <Navbar
           sidebarOpen={sidebarOpen}
           toggleSidebar={() => setSidebarOpen((prev) => !prev)}
+          user={user}
+          onLogout={() => setUser(null)}
         />
 
         <ChatWindow>
