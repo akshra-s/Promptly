@@ -1,9 +1,53 @@
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 
-export default function Navbar({ sidebarOpen, toggleSidebar }) {
+export default function Navbar({
+  sidebarOpen,
+  toggleSidebar,
+  user,
+  onLogout,
+}) {
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/auth/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+
+      setIsOpen(false);
+      onLogout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
 
   return (
     <header className="navbar">
@@ -20,30 +64,53 @@ export default function Navbar({ sidebarOpen, toggleSidebar }) {
 
       <span>Promptly</span>
 
-      <button
-        className="profile-btn"
-        aria-label="Profile"
-        aria-expanded={isOpen}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <i className="fa-solid fa-user"></i>
-      </button>
+      <div className="profile-container" ref={dropdownRef}>
+        <button
+          className="profile-btn"
+          aria-label="Profile"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <i className="fa-solid fa-user"></i>
+        </button>
 
-      {isOpen && (
-        <div className="dropDown">
-          <div className="dropDownItem">
-            <i className="fa-solid fa-gear"></i> Settings
-          </div>
+        {isOpen && (
+          <div className="dropDown">
+            <div className="profile-email">
+              <i className="fa-solid fa-user"></i>
+              <span>{user?.email}</span>
+            </div>
 
-          <div className="dropDownItem">
-            <i className="fa-solid fa-cloud-arrow-up"></i> Upgrade plan
-          </div>
+            <div className="dropdown-divider"></div>
 
-          <div className="dropDownItem">
-            <i className="fa-solid fa-arrow-right-from-bracket"></i> Log out
+            <button
+              className="dropDownItem"
+              onClick={() => setIsOpen(false)}
+            >
+              <i className="fa-solid fa-gear"></i>
+              Settings
+            </button>
+
+            <button
+              className="dropDownItem"
+              onClick={() => setIsOpen(false)}
+            >
+              <i className="fa-solid fa-cloud-arrow-up"></i>
+              Upgrade plan
+            </button>
+
+            <div className="dropdown-divider"></div>
+
+            <button
+              className="dropDownItem logout-item"
+              onClick={handleLogout}
+            >
+              <i className="fa-solid fa-arrow-right-from-bracket"></i>
+              Log out
+            </button>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </header>
   );
 }

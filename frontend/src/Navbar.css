@@ -14,8 +14,14 @@
   z-index: 10;
 }
 
-.profile-btn {
+/* Profile button */
+
+.profile-container {
+  position: relative;
   margin-left: auto;
+}
+
+.profile-btn {
   width: 36px;
   height: 36px;
   border: 1px solid #383838;
@@ -31,46 +37,68 @@
 }
 
 /* Profile dropdown */
+
 .dropDown {
   position: absolute;
-  top: 52px;
-  right: 24px;
-  width: 160px;
+  top: 48px;
+  right: 0;
+  width: 210px;
   background-color: var(--bg-surface);
-  padding: 6px 8px;
+  padding: 8px;
   border-radius: 8px;
   text-align: left;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--bg-hover);
+}
+
+.profile-email {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.profile-email i {
+  flex-shrink: 0;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--bg-hover);
+  margin: 5px 0;
 }
 
 .dropDownItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 14px;
   font-weight: 400;
   margin: 4px 0;
   padding: 10px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  text-align: left;
   cursor: pointer;
   border-radius: 6px;
-}
-
-.dropDownItem i {
-  margin-right: 8px;
 }
 
 .dropDownItem:hover {
   background-color: var(--accent-subtle);
 }
 
-@media (max-width: 700px) {
-  .navbar {
-    left: 70px;
-    padding: 0 16px;
-  }
-
-  .dropDown {
-    right: 16px;
-  }
+.logout-item {
+  color: #e06c6c;
 }
+
+/* Sidebar button */
 
 .sidebar-reopen {
   width: 36px;
@@ -89,3 +117,9 @@
   color: var(--accent);
 }
 
+@media (max-width: 700px) {
+  .navbar {
+    left: 70px;
+    padding: 0 16px;
+  }
+}
