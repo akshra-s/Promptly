@@ -22,7 +22,7 @@ export default function Sidebar({ toggleSidebar }) {
 
   const getAllThreads = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/thread", {
+      const response = await fetch("/api/thread", {
         credentials: "include",
       });
 
@@ -53,12 +53,9 @@ export default function Sidebar({ toggleSidebar }) {
     setReply(null);
 
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/thread/${newThreadId}`,
-        {
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`/api/thread/${newThreadId}`, {
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch conversation");
@@ -75,13 +72,10 @@ export default function Sidebar({ toggleSidebar }) {
 
   const deleteThread = async (threadId) => {
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/thread/${threadId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`/api/thread/${threadId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to delete conversation");

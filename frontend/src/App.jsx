@@ -36,10 +36,9 @@ function App() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8080/api/auth/user",
-          { credentials: "include" }
-        );
+        const response = await fetch("/api/auth/user", {
+          credentials: "include",
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -65,7 +64,7 @@ function App() {
     setReply(null);
 
     try {
-      const response = await fetch("http://localhost:8080/api/chat", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

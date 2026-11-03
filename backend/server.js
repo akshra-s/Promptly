@@ -1,31 +1,27 @@
 
 import express from "express";
 import "dotenv/config";
-import cors from "cors";
 import mongoose from "mongoose";
-import dns from "node:dns";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import authRoutes from "./routes/auth.js";
-
-import User from "./models/User.js";
 import chatRoutes from "./routes/chat.js";
-
-dns.setServers(["8.8.8.8"]);
+import User from "./models/User.js";
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.set("trust proxy", 1);
 
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
 
 app.use(
   session({
@@ -39,6 +35,8 @@ app.use(
     cookie: {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
     },
   })
 );
@@ -59,8 +57,13 @@ passport.deserializeUser(User.deserializeUser());
 app.use("/api/auth", authRoutes);
 app.use("/api", chatRoutes);
 
+// Serve the React frontend
+const frontendPath = path.join(__dirname, "../frontend/dist");
+
+app.use(express.static(frontendPath));
+
 app.get("/", (req, res) => {
-  res.send("Promptly backend is running!");
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 const connectDB = async () => {
@@ -68,7 +71,7 @@ const connectDB = async () => {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log("Connected with Database!");
   } catch (err) {
-    console.error("Failed to connect with database:", err.message);
+    console.error("Database connection failed:", err.message);
     process.exit(1);
   }
 };
@@ -77,7 +80,7 @@ const startServer = async () => {
   await connectDB();
 
   app.listen(port, () => {
-    console.log(`Server is listening to port-${port}`);
+    console.log(`Promptly is running on port ${port}`);
   });
 };
 

@@ -16,7 +16,7 @@ export default function Auth({ onLogin }) {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/auth/${isSignup ? "signup" : "login"}`,
+        `/api/auth/${isSignup ? "signup" : "login"}`,
         {
           method: "POST",
           headers: {
