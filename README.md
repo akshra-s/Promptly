@@ -1,4 +1,4 @@
-#🤖 Promptly
+# 🤖 Promptly
 
 > **Think. Ask. Explore.**
 
@@ -27,12 +27,12 @@ A full-stack AI chat application that lets users interact with AI, manage multip
 
 ### 💬 Chat Interface
 
-![Promptly Chat Interface](./images/chat.png)
+![Promptly Chat Interface](./Screenshots/chat.png)
 
 
 ### 🌓 Theme Modes
 
-![Promptly Theme Modes](./images/themes.png)
+![Promptly Theme Modes](./Screenshots/themes.png)
 
 ---
 
