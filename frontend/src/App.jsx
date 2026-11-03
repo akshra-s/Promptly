@@ -15,6 +15,10 @@ function App() {
   const [user, setUser] = useState(null);
   const [checkingAuth, setCheckingAuth] = useState(true);
 
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem("theme") || "dark"
+  );
+
   const [prompt, setPrompt] = useState("");
   const [reply, setReply] = useState(null);
   const [currThreadId, setCurrThreadId] = useState(() => uuid());
@@ -23,6 +27,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [allThreads, setAllThreads] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   // Check existing login session
   useEffect(() => {
@@ -120,7 +128,11 @@ function App() {
   }
 
   return (
-    <div className={`main ${sidebarOpen ? "" : "sidebar-closed"}`}>
+    <div
+      className={`main ${sidebarOpen ? "" : "sidebar-closed"} ${
+        theme === "light" ? "light-theme" : ""
+      }`}
+    >
       <MyContext.Provider value={providerValues}>
         <Sidebar
           toggleSidebar={() => setSidebarOpen((prev) => !prev)}
@@ -131,6 +143,10 @@ function App() {
           toggleSidebar={() => setSidebarOpen((prev) => !prev)}
           user={user}
           onLogout={() => setUser(null)}
+          theme={theme}
+          toggleTheme={() =>
+            setTheme((prev) => (prev === "dark" ? "light" : "dark"))
+          }
         />
 
         <ChatWindow>

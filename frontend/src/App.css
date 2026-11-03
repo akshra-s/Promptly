@@ -1,7 +1,10 @@
-:root {
-  --accent: #36d7b7;
-  --accent-subtle: #36d7b70f;
 
+:root {
+  /* Accent */
+  --accent: #36d7b7;
+  --accent-subtle: #36d7b714;
+
+  /* Dark theme */
   --bg-main: #202020;
   --bg-sidebar: #171717;
   --bg-surface: #292929;
@@ -10,6 +13,21 @@
   --text-primary: #d0d0d0;
   --text-secondary: #858585;
   --border: #383838;
+}
+
+/* Light theme */
+.main.light-theme {
+  --accent: #247966;
+  --accent-subtle: #24796614;
+
+  --bg-main: #f5f6f3;
+  --bg-sidebar: #ffffff;
+  --bg-surface: #ffffff;
+  --bg-hover: #d0ebd0;
+
+  --text-primary: #252d29;
+  --text-secondary: #68746d;
+  --border: #d6ded6;
 }
 
 * {
@@ -61,12 +79,19 @@ button {
   background: var(--bg-sidebar);
 }
 
+/* Light theme sidebar styling */
+.main.light-theme .sidebar {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
 .navbar {
   position: fixed;
   top: 0;
   right: 0;
   left: 260px;
-  z-index: 1;
+  z-index: 10;
 
   display: flex;
   align-items: center;
@@ -77,6 +102,7 @@ button {
   color: var(--text-primary);
   font-size: 18px;
   font-weight: 600;
+  border-bottom: 1px solid var(--border);
 }
 
 @media (max-width: 700px) {
@@ -90,6 +116,7 @@ button {
     padding: 0 16px;
   }
 }
+
 .main .sidebar {
   transition: width 0.25s ease, flex-basis 0.25s ease,
     min-width 0.25s ease, padding 0.25s ease;
@@ -107,6 +134,7 @@ button {
 .main.sidebar-closed .navbar {
   left: 0;
 }
+
 .auth-loading {
   display: flex;
   align-items: center;

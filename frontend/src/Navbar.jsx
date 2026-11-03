@@ -7,6 +7,8 @@ export default function Navbar({
   toggleSidebar,
   user,
   onLogout,
+  theme,
+  toggleTheme,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -98,6 +100,28 @@ export default function Navbar({
               <i className="fa-solid fa-cloud-arrow-up"></i>
               Upgrade plan
             </button>
+
+            <div className="dropDownItem theme-toggle-row">
+              <i
+                className={`fa-solid ${
+                  theme === "dark" ? "fa-moon" : "fa-sun"
+                }`}
+              ></i>
+
+              <span>{theme === "dark" ? "Dark mode" : "Light mode"}</span>
+
+              <button
+                className={`theme-switch ${
+                  theme === "light" ? "active" : ""
+                }`}
+                onClick={toggleTheme}
+                aria-label="Toggle theme"
+                role="switch"
+                aria-checked={theme === "light"}
+              >
+                <span></span>
+              </button>
+            </div>
 
             <div className="dropdown-divider"></div>
 

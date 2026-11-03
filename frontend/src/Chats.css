@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: 24px;
   scrollbar-width: thin;
-  scrollbar-color: #444 transparent;
+  scrollbar-color: var(--border) transparent;
 }
 
 .welcome-message {
@@ -38,6 +38,7 @@
 .message.user {
   align-self: flex-end;
   background: var(--bg-surface);
+  border: 1px solid var(--border);
   color: var(--text-primary);
   white-space: pre-wrap;
 }
@@ -67,6 +68,8 @@
   border-radius: 14px;
   padding: 12px;
   margin: 12px 0;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
 }
 
 .chats code {
@@ -75,6 +78,8 @@
 
 .chats .hljs {
   border-radius: 14px;
+  background: var(--bg-sidebar);
+  color: var(--text-primary);
 }
 
 .chats ul,
@@ -106,7 +111,7 @@
 .message th,
 .message td {
   padding: 10px 14px;
-  border: 1px solid #444;
+  border: 1px solid var(--border);
   text-align: left;
   white-space: normal;
   overflow-wrap: normal;
@@ -116,10 +121,11 @@
 
 .message th {
   font-weight: 600;
+  background: var(--bg-hover);
 }
 
 .message tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--accent-subtle);
 }
 
 .loader {

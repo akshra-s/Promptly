@@ -9,13 +9,14 @@
   align-items: center;
   padding: 0 24px;
   background-color: var(--bg-main);
+  color: var(--text-primary);
   font-size: 20px;
   font-weight: 600;
   z-index: 10;
+  border-bottom: 1px solid var(--border);
 }
 
 /* Profile button */
-
 .profile-container {
   position: relative;
   margin-left: auto;
@@ -24,7 +25,7 @@
 .profile-btn {
   width: 36px;
   height: 36px;
-  border: 1px solid #383838;
+  border: 1px solid var(--border);
   border-radius: 50%;
   background: var(--bg-surface);
   color: var(--accent);
@@ -37,7 +38,6 @@
 }
 
 /* Profile dropdown */
-
 .dropDown {
   position: absolute;
   top: 48px;
@@ -48,8 +48,8 @@
   border-radius: 8px;
   text-align: left;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--bg-hover);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+  border: 1px solid var(--border);
 }
 
 .profile-email {
@@ -69,7 +69,7 @@
 
 .dropdown-divider {
   height: 1px;
-  background: var(--bg-hover);
+  background: var(--border);
   margin: 5px 0;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .dropDownItem:hover {
-  background-color: var(--accent-subtle);
+  background-color: var(--bg-hover);
 }
 
 .logout-item {
@@ -99,7 +99,6 @@
 }
 
 /* Sidebar button */
-
 .sidebar-reopen {
   width: 36px;
   height: 36px;
@@ -122,4 +121,41 @@
     left: 70px;
     padding: 0 16px;
   }
+}
+
+/* Theme toggle */
+.theme-toggle-row {
+  cursor: default;
+}
+
+.theme-toggle-row span {
+  flex: 1;
+}
+
+.theme-switch {
+  width: 36px;
+  height: 20px;
+  padding: 2px;
+  border: none;
+  border-radius: 20px;
+  background: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.theme-switch span {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  transition: transform 0.2s ease;
+}
+
+.theme-switch.active {
+  background: var(--accent);
+}
+
+.theme-switch.active span {
+  transform: translateX(16px);
 }
